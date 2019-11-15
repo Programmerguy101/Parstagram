@@ -20,7 +20,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Do any additional setup after loading the view.
     }
     @IBAction func onSubmitButton(_ sender: Any) {
-        let post = PFObject(className: "Post")
+        let post = PFObject(className: "Posts")
         
         post["caption"] = commentField.text
         post["author"] = PFUser.current()!

@@ -8,6 +8,7 @@
 
 import UIKit
 import Parse
+import Alamofire
 import AlamofireImage
 
 class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -18,6 +19,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    DataRequest.addAcceptableImageContentTypes(["application/octet-stream"])
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -28,12 +30,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let query = PFQuery(className: "Posts")
+        let query = PFQuery(className:"Posts")
         query.includeKey("author")
         query.limit = 20
         
         query.findObjectsInBackground { (posts, error) in
-            if posts != nil{
+            if posts != nil {
                 self.posts = posts!
                 self.tableView.reloadData()
             }
@@ -45,6 +47,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as! PostCell
         
         let post = posts[indexPath.row]
@@ -56,14 +59,16 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let imageFile = post["image"] as! PFFileObject
         let urlString = imageFile.url!
-        let url = URL(string: urlString)
+        let url = URL(string: urlString)!
               
-        cell.photoView.af_setImage(withURL: url!)
-        
-      
-        
-        return cell
+        cell.photoView.af_setImage(withURL: url)
+
+      return cell
     }
+    
+
+    
+
 
     /*
     // MARK: - Navigation
